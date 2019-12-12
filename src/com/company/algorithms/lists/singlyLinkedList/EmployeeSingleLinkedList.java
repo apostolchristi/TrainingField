@@ -5,7 +5,7 @@ package com.company.algorithms.lists.singlyLinkedList;
  * because you have a reference to the head of the list, and so if you want to insert and delete items anywhere else
  * you'd have to start at head and you've got to traverse the entire list to find what you're looking for
  */
-public class EmployeeLinkedList {
+public class EmployeeSingleLinkedList {
 
 	private EmployeeNode head;
 	private int size;

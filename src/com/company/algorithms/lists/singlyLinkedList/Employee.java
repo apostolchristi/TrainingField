@@ -1,7 +1,10 @@
-package com.company.algorithms.lists.arrayLists;
+package com.company.algorithms.lists.singlyLinkedList;
 
 import java.util.Objects;
 
+/**
+ * This class is a Boilerplate code
+ */
 public class Employee {
 
 	private String firstName;
