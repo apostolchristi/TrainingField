@@ -1,4 +1,4 @@
-package com.company.algorithms.lists.singlyLinkedList;
+package com.company.algorithms.lists.doubleLinkedList;
 
 import java.util.Objects;
 
@@ -10,6 +10,8 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private int id;
+
+
 
 	public Employee(String firstName, String lastName, int id) {
 		this.firstName = firstName;

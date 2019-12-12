@@ -1,4 +1,5 @@
-package com.company.algorithms.lists.singlyLinkedList;
+package com.company.algorithms.lists.doubleLinkedList;
+
 
 /**
  * It contains a link to the nextNode, and it means that it stores the object reference of the next node
@@ -7,8 +8,8 @@ public class EmployeeNode {
 
 	private Employee employee;
 
-	//stores a reference to the next node in a list
 	private EmployeeNode next;
+	private EmployeeNode previous;
 
 	public EmployeeNode(Employee employee) {
 		this.employee = employee;
@@ -28,6 +29,14 @@ public class EmployeeNode {
 
 	public void setNext(EmployeeNode next) {
 		this.next = next;
+	}
+
+	public EmployeeNode getPrevious() {
+		return previous;
+	}
+
+	public void setPrevious(EmployeeNode previous) {
+		this.previous = previous;
 	}
 
 	@Override
