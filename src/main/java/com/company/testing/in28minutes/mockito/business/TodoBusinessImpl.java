@@ -2,7 +2,9 @@ package com.company.testing.in28minutes.mockito.business;
 
 import com.company.testing.in28minutes.mockito.data.api.TodoService;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // TodoBusinessImpl SUT
@@ -25,4 +27,15 @@ public class TodoBusinessImpl {
 		}
 		return filteredTodos;
 	}
+
+	public void deleteTodosNotRelatedToSpring(String user) {
+		List<String> filteredTodos = new ArrayList<>();
+		List<String> allTodos = todoService.retrieveTodos(user);
+		for (String todo : allTodos) {
+			if (!todo.contains("Spring")) {
+				todoService.deleteTodo(user);
+			}
+		}
+	}
+
 }

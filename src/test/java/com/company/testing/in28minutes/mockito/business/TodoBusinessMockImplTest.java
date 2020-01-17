@@ -89,4 +89,24 @@ public class TodoBusinessMockImplTest {
 		//Then - we will check all the changes
 		assertThat(filteredTodos.size(), is(2));
 	}
+
+
+	@Test
+	public void
+	deleteTodosRelatedToSpring_usingBDD_mock_syntax() {
+
+		//Given - everything what do the setup
+		TodoService todoServiceMock = mock(TodoService.class);
+		List<String> todos = Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
+		given(todoServiceMock.retrieveTodos("Dummy")).willReturn(todos); 	//same functionality different syntax
+		TodoBusinessImpl todoBusiness = new TodoBusinessImpl(todoServiceMock);
+
+		//When - we will call the method
+		todoBusiness.deleteTodosNotRelatedToSpring("Dummy");
+
+		//Then - we will check all the changes
+		//verify - check if the method was called on a mock
+		verify(todoServiceMock, times(1)).deleteTodo("Learn to Dance");
+		verify(todoServiceMock, never()).deleteTodo("Learn Spring MVC");
+	}
 }
