@@ -4,6 +4,7 @@ import com.company.testing.in28minutes.mockito.data.api.TodoService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -14,6 +15,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,7 +72,7 @@ public class TodoBusinessMockImplTest {
 		List<String> filteredTodos = todoBusiness.retrieveTodosRelatedToSpring("Dummy");
 
 		//Then - we will check all the changes
-		assertEquals(0, filteredTodos.size());
+		assertEquals(2, filteredTodos.size());
 	}
 
 	@Test
@@ -80,11 +82,11 @@ public class TodoBusinessMockImplTest {
 		//Given - everything what do the setup
 		TodoService todoServiceMock = mock(TodoService.class);
 		List<String> todos = Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
-		given(todoServiceMock.retrieveTodos("Dummy")).willReturn(todos); 	//same functionality different syntax
+		given(todoServiceMock.retrieveTodos("Learn to Dance")).willReturn(todos); 	//same functionality different syntax
 		TodoBusinessImpl todoBusiness = new TodoBusinessImpl(todoServiceMock);
 
 		//When - we will call the method
-		List<String> filteredTodos = todoBusiness.retrieveTodosRelatedToSpring("Dummy");
+		List<String> filteredTodos = todoBusiness.retrieveTodosRelatedToSpring("Learn to Dance");
 
 		//Then - we will check all the changes
 		assertThat(filteredTodos.size(), is(2));
@@ -98,6 +100,58 @@ public class TodoBusinessMockImplTest {
 		//Given - everything what do the setup
 		TodoService todoServiceMock = mock(TodoService.class);
 		List<String> todos = Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
+		given(todoServiceMock.retrieveTodos("Learn to Dance")).willReturn(todos); 	//same functionality different syntax
+		TodoBusinessImpl todoBusiness = new TodoBusinessImpl(todoServiceMock);
+
+		//When - we will call the method
+		todoBusiness.deleteTodosNotRelatedToSpring("Learn to Dance");
+
+		//Then - we will check all the changes
+		//verify - check if the method was called on a mock
+		verify(todoServiceMock, times(1)).deleteTodo("Learn to Dance");
+
+		verify(todoServiceMock, never()).deleteTodo("Learn Spring MVC");
+
+	}
+
+	// How was capture the argument which was passed to a specific method
+	@Test
+	public void
+	deleteTodosRelatedToSpring_usingBDD_mock_syntax_usingBDD_argumentCapture() {
+
+		//Declare Argument Captor
+		ArgumentCaptor<String>stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+		//Define Argument Captor on specific method call
+		//Capture the argument
+
+		//Given - everything what do the setup
+		TodoService todoServiceMock = mock(TodoService.class);
+		List<String> todos = Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
+		given(todoServiceMock.retrieveTodos("Learn to Dance")).willReturn(todos); 	//same functionality different syntax
+		TodoBusinessImpl todoBusiness = new TodoBusinessImpl(todoServiceMock);
+
+		//When - we will call the method
+		todoBusiness.deleteTodosNotRelatedToSpring("Learn to Dance");
+
+		//Then - we will check all the changes
+		//verify - check if the method was called on a mock
+		then(todoServiceMock).should().deleteTodo(stringArgumentCaptor.capture()); // same as verify
+		assertThat(stringArgumentCaptor.getValue(),is("Learn to Dance"));
+	}
+
+
+	@Test
+	public void
+	deleteTodosRelatedToSpring_usingBDD_mock_syntax_usingBDD_argumentCapture_MultipleTimes() {
+
+		//Declare Argument Captor
+		ArgumentCaptor<String>stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+		//Define Argument Captor on specific method call
+		//Capture the argument
+
+		//Given - everything what do the setup
+		TodoService todoServiceMock = mock(TodoService.class);
+		List<String> todos = Arrays.asList("Learn to Rock and Roll", "Learn Spring", "Learn to Dance");
 		given(todoServiceMock.retrieveTodos("Dummy")).willReturn(todos); 	//same functionality different syntax
 		TodoBusinessImpl todoBusiness = new TodoBusinessImpl(todoServiceMock);
 
@@ -105,8 +159,8 @@ public class TodoBusinessMockImplTest {
 		todoBusiness.deleteTodosNotRelatedToSpring("Dummy");
 
 		//Then - we will check all the changes
-		//verify - check if the method was called on a mock
-		verify(todoServiceMock, times(1)).deleteTodo("Learn to Dance");
-		verify(todoServiceMock, never()).deleteTodo("Learn Spring MVC");
+		//then - check if the method was called on a mock
+		then(todoServiceMock).should(times(2)).deleteTodo(stringArgumentCaptor.capture()); // same as verify
+		assertThat(stringArgumentCaptor.getAllValues().size(), is(2));
 	}
 }
